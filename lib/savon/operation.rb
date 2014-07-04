@@ -79,10 +79,15 @@ class Savon
     attr_accessor :xml_envelope
 
     # Public: Call the operation.
-    def call
+    def call(login = nil, password = nil)
       message = (xml_envelope != nil ? xml_envelope : build)
-
-      raw_response = @http.post(endpoint, http_headers, message)
+      uri = URI(endpoint)
+      req = Net::HTTP::Post.new(endpoint)
+      req.body = message
+      req.basic_auth login, password
+      raw_response = Net::HTTP.start(uri.hostname, uri.port) do |http|
+        http.request(req)
+      end
       Response.new(raw_response)
     end
 
