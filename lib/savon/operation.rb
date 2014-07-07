@@ -1,6 +1,7 @@
 require 'savon/response'
 require 'savon/envelope'
 require 'savon/example_message'
+require 'net/http'
 
 class Savon
   class Operation
